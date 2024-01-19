@@ -1,0 +1,30 @@
+name: sambuild
+
+on:
+  workflow_dispatch:
+    inputs:
+      isTrigger:
+        type: boolean
+        description: 'Trigger the workflow'
+        default: false
+        
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+      id-token: write
+      contents: read
+      
+    steps:
+      - uses: actions/checkout@v2
+      
+      - uses: actions/setup-python@v2
+      
+      - uses: aws-actions/setup-sam@v1
+
+      - name: SAM Build
+        run: sam build
+        
+      - name: List of the GitHub Actions environment variables on Linux
+        run: env
